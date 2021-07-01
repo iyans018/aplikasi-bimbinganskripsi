@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../partials/head') %>
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <%- include('../../partials/sidebar.ejs') %> 
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <!-- Top Bar (Navbar) -->
+                <%- include('../../partials/topbar') %> 
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                      <h1 class="h3 mb-0 text-gray-800"><%= title %> </h1>
+                      <p><i class="<%= icon %> "></i> <span><%= title %></span></p>
+                    </div>
+
+                    <!-- Content -->
+                    <% if (mahasiswa) { %>
+                      <div class="row mb-3">
+                        <form method="POST" action="/mahasiswa/proposalskripsi" enctype="multipart/form-data" class="col" id="form-proposal">
+                          <input type="hidden" name="nimMhs" value="<%= mahasiswa.nim._id %>">
+                          <div class="row mb-3">
+                            <div class="col-5">
+                              <label for="nim" class="form-label"><b>Nim Mahasiswa</b></label>
+                              <input type="text" name="nim" class="form-control" value="<%= mahasiswa.nim.username %>" readonly>
+                            </div>
+                            <div class="col-5">
+                              <label for="nama" class="form-label"><b>Nama Mahasiswa</b></label>
+                              <input type="text" name="nama" class="form-control" value="<%= mahasiswa.nama %>" readonly>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col-10">
+                              <label for="judul" class="form-label"><b>Judul Proposal Skripsi</b></label>
+                              <input name="judul" type="judul" class="form-control">
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col-5">
+                              <label for="fileProposal"><b>File Proposal Skripsi</b></label>
+                              <input name="fileProposal" type="file" class="form-control-file">
+                            </div>
+                          </div>
+                          <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                      </div>
+
+                      <div class="row mb-3">
+                        <div class="col">
+                          <table class="table">
+                            <thead class="thead-light">
+                              <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">NIM</th>
+                                <th scope="col">Nama Mahasiswa</th>
+                                <th scope="col">Judul Proposal</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% if (proposal.length < 1) { %>
+                                <tr>
+                                  <td><b>File proposal masih belum ada!</b></td>
+                                </tr>
+                              <% } else { %>
+                                <% proposal.forEach((prop, i) => { %>
+                                  <tr>
+                                    <th scope="row"><%= i+1 %> </th>
+                                    <td><%= prop.nimMhs.username %></td>
+                                    <td><%= prop.namaMhs %></td>
+                                    <td><%= prop.judul %></td>
+                                    <% if (prop.status === "Menunggu") { %>
+                                      <td><p class="btn btn-warning"><%= prop.status %></p></td>
+                                    <% } else if (prop.status === "Ditolak") { %>
+                                      <td><p class="btn btn-danger"><%= prop.status %></p></td>
+                                    <% } else if (prop.status === "Diterima") { %>
+                                      <td><p class="btn btn-success"><%= prop.status %></p></td>
+                                    <% } %>  
+                                    <td>
+                                      <a class="btn btn-circle btn-success" href="/mahasiswa/proposalskripsi/download/<%= prop._id %>"><i class="fas fa-download"></i></a>
+                                      <a data-id="<%= prop._id %>" class="btn btn-circle btn-danger" id="hapus"><i class="fas fa-trash"></i></a>
+                                    </td>
+                                  </tr>
+                                <% }) %>
+                              <% } %> 
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    <% } else { %>
+                      <div class="row">
+                        <div class="col">
+                          <p>Untuk mengajukan proposal harap melengkapi profile terlebih dahulu.</p>
+                        </div>
+                      </div>
+                    <% } %> 
+                </div>
+            </div>
+            <!-- Footer -->
+            <%- include('../../partials/footer') %> 
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+
+    <!-- Scroll to Top Button-->
+    <%- include('../../partials/scrolltotop') %> 
+    <!-- Logout Modal-->
+    <%- include('../../partials/modalLogout') %> 
+    <!-- Script -->
+    <%- include('../../partials/script') %> 
+    <script>
+      const btnHapus = document.querySelectorAll('#hapus');
+      btnHapus.forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+
+          const id = btn.dataset.id;
+
+          swal({
+            title: "Apakah kamu yakin?",
+            text: "Data akan terhapus selamanya dan tidak dapat kembali!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+              swal("Data berhasil didelete ", {
+                  icon: "success",
+              }).then(async function() {
+                try {
+                  const res = await fetch('/mahasiswa/proposalskripsi', {
+                    method: 'delete',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                  });
+                  const data = await res.json();
+                  if (data.redirect) {
+                    location.assign(data.redirect);
+                  }
+                } catch (error) {
+                  console.log(error);
+                }
+              });
+            }
+          });
+        })
+      })
+    </script>
+</body>
+</html>

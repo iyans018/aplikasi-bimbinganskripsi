@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../partials/head') %>
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <%- include('../../partials/sidebar.ejs') %> 
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <!-- Top Bar (Navbar) -->
+                <%- include('../../partials/topbar') %> 
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                      <h1 class="h3 mb-0 text-gray-800"><%= title %> </h1>
+                      <p><i class="<%= icon %> "></i> <span><%= title %></span></p>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="row">
+                      <form class="col" id="form-pengujian">
+                        <input type="hidden" name="id" value="<%= pengujian._id %>">
+                        <div class="row">
+                          <div class="col-5">
+                            <div class="form-group">
+                              <label for="nimMhs"><b>Nim Mahasiswa</b></label>
+                              <input type="hidden" name="idMhs" value="<%= pengujian.nimMhs._id %>">
+                              <input type="text" name="nimMhs" value="<%= pengujian.nimMhs.username %>" class="form-control" readonly>
+                            </div>
+                          </div>
+                          <div class="col-5">
+                            <div class="form-group">
+                              <label for="namaMhs"><b>Nama Mahasiswa</b></label>
+                              <input type="text" name="namaMhs" value="<%= pengujian.namaMhs %>" class="form-control" readonly>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-10">
+                            <div class="form-group">
+                              <label for="judulSkripsi"><b>Judul Skripsi</b></label>
+                              <input type="text" name="judulSkripsi" value="<%= pengujian.judulSkripsi %>" class="form-control" readonly>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-5">
+                            <div class="form-group">
+                              <label for="penguji1"><b>Penguji 1</b></label>
+                              <select name="penguji1" class="form-control">
+                                <option value="<%= pengujian.penguji2._id %>"><%= pengujian.penguji1.nama %></option>
+                                <% dosen.forEach(x => { %>
+                                  <option value="<%= x._id %>"><%= x.nama %></option>
+                                <% }) %>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-5">
+                            <div class="form-group">
+                              <label for="penguji2"><b>Penguji 2</b></label>
+                              <select name="penguji2" class="form-control">
+                                <option value="<%= pengujian.penguji2._id %>"><%= pengujian.penguji2.nama %></option>
+                                <% dosen.forEach(x => { %>
+                                  <option value="<%= x._id %>"><%= x.nama %></option>
+                                <% }) %>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-4">
+                            <div class="form-group">
+                              <label for="tempatPengujian"><b>Tempat Pelaksanaan</b></label>
+                              <input type="text" name="tempatPengujian" class="form-control" value="<%= pengujian.tempatPengujian %>">
+                            </div>
+                          </div>
+                          <div class="col-3">
+                            <div class="form-group">
+                              <label for="tglPelaksanaan"><b>Tgl Pelaksanaan</b></label>
+                              <input type="date" name="tglPelaksanaan" class="form-control" value="<%= pengujian.tglPelaksanaan %>">
+                            </div>
+                          </div>
+                          <div class="col-3">
+                            <div class="form-group">
+                              <label for="waktuPengujian"><b>Waktu Pengujian</b></label>
+                              <input type="text" name="waktuPengujian" class="form-control" value="<%= pengujian.waktuPengujian %>">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-10">
+                            <div class="form-group">
+                              <label for="judulSkripsi"><b>Status</b></label>
+                              <select name="status" class="form-control">
+                                <option value="<%= pengujian.status %>"><%= pengujian.status %></option>
+                                <option value="Revisi">Revisi</option>
+                                <option value="Diterima">Diterima</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-10">
+                            <div class="form-group">
+                              <label for="keterangan"><b>Keterangan</b></label>
+                              <textarea name="keterangan" class="form-control" rows="4"><%= pengujian.keterangan %></textarea>
+                            </div>
+                          </div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Proses</button>
+                        <a class="btn btn-secondary" href="/admin/laporan/skripsi">Kembali</a>
+                      </form>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Footer -->
+            <%- include('../../partials/footer') %> 
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+
+    <!-- Scroll to Top Button-->
+    <%- include('../../partials/scrolltotop') %> 
+    <!-- Logout Modal-->
+    <%- include('../../partials/modalLogout') %> 
+    <!-- Script -->
+    <%- include('../../partials/script') %>
+    <script>
+      const form = document.querySelector('#form-pengujian');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const id = form.id.value;
+        const idMhs = form.idMhs.value;
+        const penguji1 = form.penguji1.value;
+        const penguji2 = form.penguji2.value;
+        const tempatPengujian = form.tempatPengujian.value;
+        const tglPelaksanaan = form.tglPelaksanaan.value;
+        const waktuPengujian = form.waktuPengujian.value;
+        const status = form.status.value;
+        const keterangan = form.keterangan.value;
+
+        try {
+          const res = await fetch(`/admin/laporan/skripsi/${id}`, {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              id, idMhs, penguji1, penguji2, tempatPengujian,
+              tglPelaksanaan, waktuPengujian, status, keterangan
+            })
+          });
+          const data = await res.json();
+          if (data.redirect) {
+            swal("Berhasil update data.")
+            .then(() => location.assign(data.redirect))
+          } else {
+            swal("Gagal mengupdate data!")
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      });
+    </script>
+</body>
+</html>

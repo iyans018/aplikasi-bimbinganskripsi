@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../partials/head') %>
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <%- include('../../partials/sidebar.ejs') %> 
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <!-- Top Bar (Navbar) -->
+                <%- include('../../partials/topbar') %> 
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800"><%= title %> </h1>
+                        <p><i class="<%= icon %> "></i> <span><%= title %></span></p>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="row">
+                      <div class="col">
+                        <table class="table">
+                          <thead class="thead-light">
+                            <tr>
+                              <th scope="col">No</th>
+                              <th scope="col">Nim</th>
+                              <th scope="col">Nama</th>
+                              <th scope="col">Judul Skripsi</th>
+                              <th scope="col">Download</th>
+                              <th scope="col">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% if (pengujian.length > 0) { %>
+                              <% pengujian.forEach((list, index) => { %>
+                                <tr>
+                                  <td><%= index+1 %></td>
+                                  <td><%= list.nimMhs.username %></td>
+                                  <td><%= list.namaMhs %></td>
+                                  <td><%= list.judulSkripsi %></td>
+                                  <td>
+                                    <a href="/admin/daftarpengujian/download/<%= list._id %>" class="btn btn-success"><i class="fas fa-download"></i></a>
+                                  </td>
+                                  <td>
+                                    <a href="/admin/daftarpengujian/<%= list._id %> " class="btn btn-primary">Proses</a>
+                                  </td>
+                                </tr>
+                              <% }) %>
+                            <% } else { %>
+                              <tr>
+                                <td><p>Belum ada mahasiswa daftar bimbingan skripsi.</p></td>
+                              </tr>
+                            <% } %> 
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Footer -->
+            <%- include('../../partials/footer') %> 
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+
+    <!-- Scroll to Top Button-->
+    <%- include('../../partials/scrolltotop') %> 
+    <!-- Logout Modal-->
+    <%- include('../../partials/modalLogout') %> 
+    <!-- Script -->
+    <%- include('../../partials/script') %>
+    <script>
+      const forms = document.querySelectorAll('#form-daftar');
+
+      forms.forEach(form => {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const id = form.id.value;
+          const pembimbing = form.pembimbing.value;
+
+          try {
+            const res = await fetch('/admin/daftarskripsi', {
+              method: 'put',
+              body: JSON.stringify({ id, pembimbing }),
+              headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            if (data.redirect) {
+              swal("Berhasil menerima pendaftaran!")
+              .then(() => location.assign(data.redirect));
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        })
+      })
+    </script>
+</body>
+</html>

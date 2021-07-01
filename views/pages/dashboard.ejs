@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <%- include('../partials/sidebar.ejs') %> 
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <!-- Top Bar (Navbar) -->
+                <%- include('../partials/topbar') %> 
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800"><%= title %> </h1>
+                        <p><i class="<%= icon %> "></i> <span><%= title %></span></p>
+                    </div>
+
+                    <% if (user.role === 'Admin') { %>
+                        <!-- Content Row -->
+                        <div class="row">
+
+                            <!-- Jumlah Admin -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Jumlah Admin
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <%= users.length %> 
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-user fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Jumlah Dosen -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Jumlah Dosen
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><%= dosens.length %> </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-graduation-cap fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Jumlah Mahasiswa -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-secondary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                                                    Jumlah Mahasiswa
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><%= mahasiswas.length %> </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pending Requests Card Example -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                    Pengajuan Proposal
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><%= proposals.length %> </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-copy fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% } else if (user.role === 'Dosen') { %>
+                        <!-- Content Row -->
+                        <div class="row">
+                            <div class="col">
+                                <h3>Selamat datang di Bimbol</h3>
+                                <p>Selamat Datang, <%= userData.nama %></p>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Jumlah User -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Jumlah Bimbingan Menunggu
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <%= skripsis.length %> 
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-user fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% } else if (user.role === 'Mahasiswa') { %>
+                        <!-- Content Row -->
+                        <div class="row">
+                            <div class="col">
+                                <h3>Selamat Datang, <%= userData.nama %></h3>
+                                <p><b>Langkah - langkah melakukan bimbingan :</b></p>
+                                <p>1. Lengkapi Profile Mahasiswa</p>
+                                <p>2. Mengajukan proposal skripsi</p>
+                                <p>3. Setelah proposal diterima, lakukan pendaftaran bimbingan skripsi</p>
+                                <p>4. Setelah daftar bimbingan diterima, lakukan bimbingan.</p>
+                                <p>5. Setelah bimbingan selesai, daftar untuk sidang skripsi.</p>
+                            </div>
+                        </div>
+                    <% } %> 
+                </div>
+            </div>
+            <!-- Footer -->
+            <%- include('../partials/footer') %> 
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+
+    <!-- Scroll to Top Button-->
+    <%- include('../partials/scrolltotop') %> 
+    <!-- Logout Modal-->
+    <%- include('../partials/modalLogout') %> 
+    <!-- Script -->
+    <%- include('../partials/script') %> 
+</body>
+</html>

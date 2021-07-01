@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../../partials/authHead') %> 
+
+<body class="bg-gradient-primary">
+
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">User Login</h1>
+                            </div>
+                            <form class="user" action="/login">
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user"
+                                        id="username"placeholder="Username" name="username">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control form-control-user"
+                                        id="exampleInputPassword" placeholder="Password" name="password">
+                                    <div class="error-text"></div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-3">
+                                        <button class="btn btn-primary btn-user btn-block" type="submit">Login</button>
+                                    </div>
+                                    <div class="col-3">
+                                        <a href="/" class="btn btn-secondary btn-user btn-block">Kembali</a>
+                                    </div>
+                                </div>
+                            </form>
+                            <hr>
+                            <div class="text-center">
+                                <a class="small" href="/register">Create an Account!</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const form = document.querySelector('form');
+        const errorText = document.querySelector('.error-text');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            errorText.textContent = "";
+
+            // get the values
+            const username = form.username.value;
+            const password = form.password.value;
+
+            try {
+                const res = await fetch('/login', {
+                    method: "POST",
+                    body: JSON.stringify({ username, password }),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+                console.log(data);
+                if (data.error) {
+                    errorText.textContent = data.error.message;
+                }
+                if (data.user) {
+                    swal({
+                        title: "Login Success!",
+                        text: "Click ok button to continue!",
+                        icon: "success",
+                        button: "OK!"
+                    }).then(function() {
+                        location.assign('/dashboard');
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        })
+    </script>
+    <%- include('../../partials/authScript') %>
+
+</body>
+
+</html>
